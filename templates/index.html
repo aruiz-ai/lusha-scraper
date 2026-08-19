@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lusha Contact Scraper</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #f3f2ef;
+      color: #1d2226;
+    }
+    .container { max-width: 860px; margin: 40px auto; padding: 0 16px; }
+    h1 { font-size: 26px; margin: 0 0 4px; color: #7b3ff2; }
+    .sub { color: #5e5d5f; margin: 0 0 24px; }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+    }
+    .hidden { display: none !important; }
+    label { display: block; font-weight: 600; margin: 12px 0 4px; }
+    input[type=text], input[type=number] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cfcfcf;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    button {
+      border: none;
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 16px;
+    }
+    .btn-link {
+      border: none;
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 16px;
+      display: inline-block;
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn-primary { background: #7b3ff2; color: #fff; width: 100%; }
+    .btn-secondary { background: #f0ebfc; color: #7b3ff2; }
+    .btn-disabled { background: #c9b8f0; cursor: not-allowed; }
+    .btn-row { display: flex; gap: 12px; margin-top: 16px; }
+    .btn-row .btn-link { width: auto; margin-top: 0; flex: 1; }
+    .banner { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+    .banner-warn { background: #fff4e5; color: #a04d00; }
+    .banner-ok { background: #e7f5ec; color: #086b34; }
+    .banner-info { background: #f0ebfc; color: #7b3ff2; }
+    .stats { display: flex; gap: 24px; margin: 16px 0; font-size: 15px; }
+    .progress-track { height: 8px; background: #e1e1e1; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0; background: #7b3ff2; transition: width .4s; }
+    .error { background: #fdecec; color: #a31621; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; }
+    .checkbox-label { display: flex; align-items: center; gap: 8px; font-weight: 500; margin-top: 10px; cursor: pointer; }
+    .checkbox-label input { width: auto; }
+    .progress-fill.indeterminate { width: 40% !important; animation: indeterminate 1.2s ease-in-out infinite; }
+    @keyframes indeterminate {
+      0% { margin-left: -40%; }
+      50% { margin-left: 30%; }
+      100% { margin-left: 110%; }
+    }
+    #resultSection h2 { margin: 0 0 8px; font-size: 18px; }
+    .table-wrap { max-height: 420px; overflow: auto; border: 1px solid #e1e1e1; border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee; }
+    th { position: sticky; top: 0; background: #7b3ff2; color: #fff; }
+    td a { color: #7b3ff2; text-decoration: none; word-break: break-all; }
+    .muted { color: #5e5d5f; font-size: 13px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Lusha Contact Scraper</h1>
+    <p class="sub">Busca contactos de una empresa en Lusha y exporta los datos a Excel.</p>
+
+    <div id="authBanner" class="banner banner-warn hidden"></div>
+
+    <div class="card">
+      <form id="searchForm">
+        <label for="company">Nombre de la empresa</label>
+        <input type="text" id="company" placeholder="Ej. Google, Microsoft, Mercado Libre..." required autocomplete="off">
+        <label for="departments">Departamentos (opcional, uno o varios)</label>
+        <input type="text" id="departments" placeholder="Ej. Engineering & Technical, Sales" list="departmentsOptions" autocomplete="off">
+        <datalist id="departmentsOptions">
+          <option value="Engineering & Technical"></option>
+          <option value="Business Development"></option>
+          <option value="Consulting"></option>
+          <option value="Customer Service"></option>
+          <option value="Finance"></option>
+          <option value="General Management"></option>
+          <option value="Health Care & Medical"></option>
+          <option value="Human Resources"></option>
+          <option value="Information Technology"></option>
+          <option value="Legal"></option>
+          <option value="Marketing"></option>
+          <option value="Operations"></option>
+          <option value="Product"></option>
+          <option value="Research & Analytics"></option>
+          <option value="Sales"></option>
+        </datalist>
+        <p class="muted">Sepáralos por coma. Solo se aplican los departamentos que existen en Lusha.</p>
+        <label for="seniorities">Seniority (niveles, opcional)</label>
+        <input type="text" id="seniorities" placeholder="Ej. C-suite, Director, Manager" list="seniorityOptions" autocomplete="off">
+        <datalist id="seniorityOptions">
+          <option value="Founder"></option>
+          <option value="Partner"></option>
+          <option value="C-suite"></option>
+          <option value="Vice president"></option>
+          <option value="Director"></option>
+          <option value="Manager"></option>
+          <option value="Senior"></option>
+          <option value="Entry"></option>
+          <option value="Intern"></option>
+        </datalist>
+        <p class="muted">Sepáralos por coma. Solo se aplican los niveles que existen en Lusha.</p>
+        <label for="countries">País / países (opcional)</label>
+        <input type="text" id="countries" placeholder="Ej. Spain, Mexico, United States" autocomplete="off">
+        <p class="muted">Texto libre. Si Lusha no tiene resultados para el país, se omite.</p>
+        <label for="maxPages">Máximo de páginas a recorrer</label>
+        <input type="number" id="maxPages" value="10" min="1" max="50">
+        <label class="checkbox-label">
+          <input type="checkbox" id="allPages"> Recorrer todas las páginas disponibles
+        </label>
+        <button type="submit" id="searchBtn" class="btn-primary">Buscar contactos</button>
+        <p class="muted">Se exportan nombre, cargo y URL de LinkedIn visibles en la lista de resultados, sin gastar créditos.</p>
+      </form>
+    </div>
+
+    <div id="progressCard" class="card hidden">
+      <h2>Progreso</h2>
+      <div class="stats">
+        <span><strong id="currentPage">0</strong> páginas</span>
+        <span><strong id="found">0</strong> contactos</span>
+      </div>
+      <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+      <p class="muted" id="statusMessage"></p>
+    </div>
+
+    <div id="errorBox" class="error hidden"></div>
+
+    <div id="resultSection" class="card hidden">
+      <h2>Resultados</h2>
+      <p class="muted" id="previewNote"></p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Nombre</th><th>Cargo</th><th>URL de LinkedIn</th></tr>
+          </thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+      <div class="btn-row">
+        <a id="downloadBtn" class="btn-link btn-primary hidden" href="#">Descargar Excel (.xlsx)</a>
+        <a id="driveBtn" class="btn-link hidden" href="#" target="_blank" rel="noopener">Abrir en Google Drive</a>
+      </div>
+    </div>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
