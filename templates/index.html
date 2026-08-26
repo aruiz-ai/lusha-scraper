@@ -12,6 +12,13 @@
       background: #f3f2ef;
       color: #1d2226;
     }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .topbar .sub { margin-bottom: 0; }
     .container { max-width: 860px; margin: 40px auto; padding: 0 16px; }
     h1 { font-size: 26px; margin: 0 0 4px; color: #7b3ff2; }
     .sub { color: #5e5d5f; margin: 0 0 24px; }
@@ -84,8 +91,12 @@
 </head>
 <body>
   <div class="container">
-    <h1>Lusha Contact Scraper</h1>
-    <p class="sub">Busca contactos de una empresa en Lusha y exporta los datos a Excel.</p>
+    <div class="topbar">
+      <div>
+        <h1>Lusha Contact Scraper</h1>
+        <p class="sub">Busca contactos de una empresa en Lusha y exporta los datos a Excel.</p>
+      </div>
+    </div>
 
     <div id="authBanner" class="banner banner-warn hidden"></div>
 

@@ -1,4 +1,5 @@
 import os
+import sys
 import threading
 
 from flask import Flask, jsonify, render_template, request, send_file
@@ -12,6 +13,13 @@ from scraper.lusha import LoginRequiredError, LushaScraper, ScraperError
 app = Flask(__name__)
 jobs = JobManager()
 scraper = LushaScraper()
+_server = None
+
+
+@app.after_request
+def _no_cache(response):
+    response.headers["Cache-Control"] = "no-store"
+    return response
 
 _lock = threading.Lock()
 LOGIN_STATE = {"running": False, "last_result": None}
@@ -202,7 +210,30 @@ def job_download(job_id):
     )
 
 
+@app.post("/api/shutdown")
+def api_shutdown():
+    server = _server
+    if server is None:
+        return jsonify({"error": "No se puede detener el servidor desde aquí."}), 400
+    threading.Timer(1.0, server.shutdown).start()
+    return render_template("shutdown.html")
+
+
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    print(f"Lusha Contact Scraper -> http://127.0.0.1:{port}")
-    app.run(host="127.0.0.1", port=port, debug=False)
+    import bootstrap
+
+    if not bootstrap.single_instance():
+        sys.exit(1)
+    if not bootstrap.ensure_runnable():
+        sys.exit(1)
+
+    port = int(os.environ.get("PORT", 0)) or bootstrap.find_free_port(5000)
+    url = f"http://127.0.0.1:{port}"
+    bootstrap.open_browser_when_ready(url)
+
+    from werkzeug.serving import make_server
+
+    _server = make_server("127.0.0.1", port, app, threaded=True)
+    _server.serve_forever()
+    if getattr(sys, "frozen", False):
+        os._exit(0)

@@ -1,0 +1,164 @@
+======================================================================
+        MANUAL DE USO - LUSHA CONTACT SCRAPER
+        (Buscador de contactos de empresas en Lusha)
+======================================================================
+
+Este programa busca contactos de una empresa en la web de Lusha
+(nombre, cargo y enlace de LinkedIn) y te entrega el resultado en
+un archivo de Excel.
+
+No necesitas saber nada de computación avanzada: sigue estos pasos
+en orden y listo.
+
+
+----------------------------------------------------------------------
+PASO 1 - CREA UNA CARPETA PARA EL PROGRAMA
+----------------------------------------------------------------------
+
+1. Ve al Escritorio (o a Documentos).
+2. Haz clic derecho en un espacio vacio y elige:
+   "Nuevo" -> "Carpeta".
+3. Ponle un nombre facil, por ejemplo:  Lusha
+
+IMPORTANTE: el programa necesita guardar archivos en esa carpeta,
+asi que debe estar en un lugar donde puedas escribir, como el
+Escritorio o Documentos. NO lo pongas en C:\Archivos de programa
+ni en carpetas del sistema.
+
+
+----------------------------------------------------------------------
+PASO 2 - COLOCA EL PROGRAMA DENTRO DE LA CARPETA
+----------------------------------------------------------------------
+
+1. Busca el archivo que descargaste:  LushaScraper.exe
+2. Copialo (clic derecho -> Copiar) y pegalo dentro de la carpeta
+   que creaste (clic derecho -> Pegar).
+
+
+----------------------------------------------------------------------
+PASO 3 - ABRE EL PROGRAMA (PRIMERA VEZ)
+----------------------------------------------------------------------
+
+1. Entra a la carpeta y haz DOBLE CLIC sobre  LushaScraper.exe
+2. La PRIMERA vez el programa necesita descargar un navegador
+   interno para funcionar:
+
+   - Debes tener conexion a internet.
+   - Aparecera una ventana con una barra que dice
+     "Primera ejecucion: instalando Chromium...".
+   - Pesa unos 160 MB y puede tardar varios minutos.
+   - SOLO pasa la primera vez. Las siguientes veces abre rapido.
+
+3. Cuando termine, se abrira solo tu navegador de internet con la
+   pagina del programa. Esa pagina es donde trabajas.
+
+
+----------------------------------------------------------------------
+PASO 4 - INICIA SESION EN LUSHA (SOLO LA PRIMERA VEZ)
+----------------------------------------------------------------------
+
+1. Si ves un aviso amarillo que dice que necesitas iniciar sesion,
+   haz clic en el boton naranja/celeste:
+   "Iniciar sesión en Lusha".
+2. Se abrira UNA VENTANA NUEVA del navegador (es parte del
+   programa). Ahi escribe tu correo y contraseña de Lusha como
+   siempre haces.
+3. Cuando entres, la sesion queda guardada. Ya no tendras que
+   hacerlo cada dia (solo si caduca, el programa te avisara).
+
+
+----------------------------------------------------------------------
+PASO 5 - HAZ TU BUSQUEDA
+----------------------------------------------------------------------
+
+En la pagina del programa llena los campos:
+
+- Nombre de la empresa:  obligatorio. Ejemplo: Google
+
+- Departamentos (opcional): para filtrar por area.
+  Ejemplo: Sales, Marketing
+  (separados por coma; si escribes uno que no existe, se ignora)
+
+- Seniority (opcional): nivel del cargo.
+  Ejemplo: C-suite, Director, Manager
+
+- Pais / paises (opcional): texto normal.
+  Ejemplo: Spain, Mexico
+
+- Maximo de paginas: cuantas paginas de resultados recorrer.
+  Si quieres TODO, marca la casilla
+  "Recorrer todas las paginas disponibles"
+  (ojo: puede tardar bastante).
+
+Al final haz clic en el boton morado:  "Buscar contactos"
+
+
+----------------------------------------------------------------------
+PASO 6 - ESPERA Y DESCARGA LOS RESULTADOS
+----------------------------------------------------------------------
+
+1. Veras una barra de progreso con la cantidad de paginas y
+   contactos encontrados. Puedes ver la lista poco a poco.
+
+2. PACIENCIA: la busqueda va despacio a proposito para no tener
+   problemas con Lusha. Una busqueda grande puede tardar mucho.
+
+3. Al terminar aparecen DOS botones:
+
+   - "Descargar Excel (.xlsx)": guarda el archivo con todos los
+     contactos (normalmente se va a tu carpeta de Descargas).
+
+   - "Abrir en Google Drive": abre el mismo archivo ya subido a
+     internet, por si prefieres compartirlo.
+
+   Tambien puedes copiar datos directo de la tabla de la pantalla
+   (muestra hasta 60 filas).
+
+
+----------------------------------------------------------------------
+PASO 7 - CIERRA EL PROGRAMA
+----------------------------------------------------------------------
+
+Haz clic en el boton "Salir" (arriba a la derecha). Eso apaga todo
+correctamente. La ventana del navegador de Lusha se cierra sola.
+
+
+----------------------------------------------------------------------
+COSAS IMPORTANTES PARA RECORDAR
+----------------------------------------------------------------------
+
+- UN SOLO PROGRAMA A LA VEZ: si sale un mensaje de que ya esta en
+  ejecucion, significa que hay otra ventana abierta. Buscala y
+  cierrala primero.
+
+- NO BORRES LAS CARPETAS QUE APARECEN JUNTO AL EXE: despues del
+  primer uso se crean carpetas llamadas "data" y "ms-playwright".
+  Ahi viven tu sesion, tus resultados y el navegador interno.
+  Si las borras, solo tendras que volver a iniciar sesion o
+  re-descargar el navegador (y esperar otra vez).
+
+- MUEVE SIEMPRE LA CARPETA COMPLETA: si necesitas llevar el
+  programa a otra PC o carpeta, mueve la carpeta completa (exe +
+  data + ms-playwright) para no perder la sesion ni el navegador.
+
+- ANTIVIRUS: algunos antivirus desconfian de programas como este.
+  Si te pregunta, elige "Permitir" o agrega la carpeta a excepciones.
+
+- SI ALGO SALE MAL: cierra todo (boton "Salir"), espera unos
+  segundos y vuelve a abrir el programa. Si dice que la sesion
+  caduco, vuelve a iniciar sesion (Paso 4).
+
+
+----------------------------------------------------------------------
+RESUMEN ULTRA CORTO
+----------------------------------------------------------------------
+
+1. Crear carpeta -> poner el exe dentro.
+2. Doble clic al exe (la primera vez descarga e instala algo, espera).
+3. Iniciar sesion en Lusha (solo la primera vez).
+4. Escribir empresa (y filtros si quieres) -> "Buscar contactos".
+5. Esperar -> "Descargar Excel".
+6. Boton "Salir" al terminar.
+
+¿Dudas? Contacta a quien te entrego este programa.
+======================================================================

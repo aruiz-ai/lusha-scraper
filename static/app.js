@@ -211,7 +211,7 @@ form.addEventListener("submit", async (event) => {
   const auth = await getAuthStatus();
   if (!auth || !auth.logged_in) {
     setError("Necesitas iniciar sesión en Lusha antes de buscar.");
-    refreshAuth();
+refreshAuth();
     return;
   }
 

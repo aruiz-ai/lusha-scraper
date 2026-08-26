@@ -1,0 +1,22 @@
+services:
+  app:
+    build: .
+    container_name: lusha-scraper
+    ports:
+      - "5001:5000"
+      - "6081:6080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      CHROMIUM_NO_SANDBOX: "1"
+      VNC_ENABLED: "1"
+      TZ: "America/Mexico_City"
+      # Descomenta para proteger el escritorio noVNC con contraseña:
+      # VNC_PASSWORD: "cambia-esto"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/api/auth/status', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s

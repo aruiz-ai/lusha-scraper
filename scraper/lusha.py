@@ -5,6 +5,11 @@ import time
 
 from playwright.async_api import async_playwright
 
+try:
+    from playwright_stealth import Stealth
+except Exception:
+    Stealth = None
+
 import config
 from scraper import selectors
 
@@ -53,7 +58,7 @@ class LushaScraper:
                     await page.goto(
                         config.LUSHA_PROSPECTING_URL,
                         wait_until="domcontentloaded",
-                        timeout=60000,
+                        timeout=180000,
                     )
                     await self._check_interruptions(page)
                     await self._human_delay(2, 3)
@@ -436,9 +441,29 @@ class LushaScraper:
             locale="es-ES",
             timezone_id="America/Mexico_City",
         )
-        await context.add_init_script(
-            "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
-        )
+        if Stealth is not None:
+            try:
+                await Stealth().apply_stealth_async(context)
+            except Exception:
+                pass
+        init_script = """
+            Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+            Object.defineProperty(navigator, 'platform', {get: () => 'Win32'});
+            try {
+                const uad = navigator.userAgentData;
+                if (uad) {
+                    Object.defineProperty(uad, 'platform', {get: () => 'Windows'});
+                    const origHighEntropy = uad.getHighEntropyValues.bind(uad);
+                    uad.getHighEntropyValues = async (hints) => {
+                        const values = await origHighEntropy(hints);
+                        if ('platform' in values) values.platform = 'Windows';
+                        if ('platformVersion' in values) values.platformVersion = '10.0.0';
+                        return values;
+                    };
+                }
+            } catch (error) {}
+        """
+        await context.add_init_script(init_script)
         page = await context.new_page()
         return browser, context, page
 
@@ -457,14 +482,14 @@ class LushaScraper:
             await page.goto(
                 config.LUSHA_DASHBOARD_URL,
                 wait_until="domcontentloaded",
-                timeout=60000,
+                timeout=180000,
             )
             await page.wait_for_timeout(3000)
             if "auth.lusha.com" not in page.url.lower():
                 await page.goto(
                     config.LUSHA_PROSPECTING_URL,
                     wait_until="domcontentloaded",
-                    timeout=60000,
+                    timeout=180000,
                 )
                 await page.wait_for_timeout(3000)
 
@@ -477,12 +502,6 @@ class LushaScraper:
                 while time.time() < deadline:
                     if await self._has_valid_session(page):
                         break
-                    if "auth.lusha.com" not in page.url.lower():
-                        await page.goto(
-                            config.LUSHA_PROSPECTING_URL,
-                            wait_until="domcontentloaded",
-                            timeout=60000,
-                        )
                     await asyncio.sleep(config.LOGIN_POLL_SECONDS)
                 if not await self._has_valid_session(page):
                     raise ScraperError(
