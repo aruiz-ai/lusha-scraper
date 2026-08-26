@@ -10,7 +10,7 @@ services:
     environment:
       CHROMIUM_NO_SANDBOX: "1"
       VNC_ENABLED: "1"
-      TZ: "America/Mexico_City"
+      TZ: "America/Bogota"
       # Descomenta para proteger el escritorio noVNC con contraseña:
       # VNC_PASSWORD: "cambia-esto"
     restart: unless-stopped
