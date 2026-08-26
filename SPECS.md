@@ -40,10 +40,8 @@ sube automáticamente a **Google Drive** si hay credenciales configuradas.
   renderiza `templates/shutdown.html` y apaga el servidor Werkzeug con un
   timer de 1s.
 
-Arranque (`python app.py` / exe): `bootstrap.single_instance()` (mutex global de
-Windows), `bootstrap.ensure_runnable()`, puerto libre desde 5000
-(`find_free_port`), apertura del navegador del usuario cuando el servidor
-responde y servidor con `werkzeug.serving.make_server` (threaded).
+Arranque (`python app.py`): servidor con `werkzeug.serving.make_server` en
+`127.0.0.1:5000` (threaded).
 
 ### `_run_job`
 
@@ -61,10 +59,8 @@ responde y servidor con `werkzeug.serving.make_server` (threaded).
 
 ## `config.py`
 
-- Rutas: `BASE_DIR` (junto al `.exe` cuando está empaquetado con PyInstaller,
-  vía `sys.frozen`), `DATA_DIR`, `EXPORTS_DIR`, `STORAGE_STATE_PATH`,
-  `BROWSERS_DIR`. En el exe fija `PLAYWRIGHT_BROWSERS_PATH=<base>/ms-playwright`
-  (Chromium se descarga en la primera ejecución junto al ejecutable).
+- Rutas: `BASE_DIR` (directorio del script), `DATA_DIR`, `EXPORTS_DIR`,
+  `STORAGE_STATE_PATH`, `BROWSERS_DIR`.
 - URLs: `LUSHA_DASHBOARD_URL`, `LUSHA_PROSPECTING_URL`
   (`/prospecting/contacts`).
 - Límites: `DEFAULT_MAX_PAGES=10`, `MAX_PAGES_LIMIT=50`,
@@ -76,8 +72,7 @@ responde y servidor con `werkzeug.serving.make_server` (threaded).
 - **Delays conservadores**: `PAGE_DELAY_MIN=15`, `PAGE_DELAY_MAX=25`,
   `SCROLL_DELAY_MIN=1.5`, `SCROLL_DELAY_MAX=3.0`, `SCROLL_STEP=300`,
   `SCROLL_STEP_DELAY=150`, `RESULT_WAIT_SECONDS=4`, `LOGIN_POLL_SECONDS=2`.
-- Crea `data/` y `data/exports/` al importarse (con try/except para no tumbar
-  el arranque si falla la escritura).
+- Crea `data/` y `data/exports/` al importarse.
 
 ## `jobs.py`
 
@@ -109,18 +104,6 @@ Subida del Excel mediante cuenta de servicio (`google-api-python-client`):
   `DRIVE_FOLDER_ID` (o a la raíz de la cuenta si está vacío); con
   `DRIVE_PUBLIC_LINKS` crea permiso `anyone/reader`.
 - `DriveError` envuelve fallos de autenticación, subida o compartición.
-
-## `bootstrap.py`
-
-Utilidades de arranque del empaquetado (en desarrollo casi todo es no-op):
-
-- `single_instance()` — mutex global de Windows; muestra error tkinter si ya
-  hay otra instancia.
-- `ensure_runnable()` — comprueba escritura en `data/` y `data/exports/`;
-  instala Chromium (ventana de progreso tkinter, ~160 MB) si no existe en
-  `BROWSERS_DIR`. Log opcional en `data/boot.log` con `LUSHA_DEBUG=1`.
-- `find_free_port(preferred=5000)`, `open_browser_when_ready(url)`,
-  `_show_error()` (tkinter).
 
 ## `scraper/lusha.py` + `scraper/selectors.py`
 
@@ -226,8 +209,6 @@ Clase `LushaScraper` (espejo de `LinkedInScraper`, sin reveals de créditos):
 - Retiro de búsquedas de Lusha a alto volumen: los delays muy conservadores
   (15–25s entre páginas) y `ALL_PAGES_SAFETY_LIMIT` ayudan a evitarlo. El
   scraper además corta solo si una página no aporta contactos nuevos.
-- Empaquetado: `build.bat` + `LushaScraper.spec` (PyInstaller). En el exe los
-  datos viven junto al binario y Chromium se descarga en `ms-playwright/` en la
-  primera ejecución (guiada por `bootstrap.py`).
+- Empaquetado: ejecucion directa con `python app.py`.
 - Legal: scraping del dashboard puede violar los ToS de Lusha; uso personal y
   bajo volumen.

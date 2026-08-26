@@ -1,5 +1,4 @@
 import os
-import sys
 import threading
 
 from flask import Flask, jsonify, render_template, request, send_file
@@ -220,20 +219,9 @@ def api_shutdown():
 
 
 if __name__ == "__main__":
-    import bootstrap
-
-    if not bootstrap.single_instance():
-        sys.exit(1)
-    if not bootstrap.ensure_runnable():
-        sys.exit(1)
-
-    port = int(os.environ.get("PORT", 0)) or bootstrap.find_free_port(5000)
-    url = f"http://127.0.0.1:{port}"
-    bootstrap.open_browser_when_ready(url)
-
     from werkzeug.serving import make_server
 
+    port = int(os.environ.get("PORT", 5000))
     _server = make_server("127.0.0.1", port, app, threaded=True)
+    print(f"Servidor arrancado en http://127.0.0.1:{port}")
     _server.serve_forever()
-    if getattr(sys, "frozen", False):
-        os._exit(0)
